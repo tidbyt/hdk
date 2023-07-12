@@ -6,11 +6,12 @@
 
 This repository contains a community supported firmware for the Tidbyt hardware 🤓. 
 
-> ⚠️ Warning! Flashing your Tidbyt with this firmware or derivatives could fatally 
+![social banner](./docs/assets/social.png)
+
+## Warning
+⚠️ Warning! Flashing your Tidbyt with this firmware or derivatives could fatally 
 damage your device. As such, flashing your Tidbyt with this firmware or
 derivatives voids your warranty and comes without support.
-
-![social banner](./docs/assets/social.png)
 
 ## Setup
 This project uses PlatformIO to build, flash, and monitor firmware on the Tidbyt.
