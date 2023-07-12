@@ -1,0 +1,10 @@
+{
+    "name": "ESP32-HUB75-MatrixPanel-I2S-DMA",
+    "build": {
+        "includeDir": "ESP32-HUB75-MatrixPanel-I2S-DMA",
+        "srcFilter": [
+            "+<ESP32-HUB75-MatrixPanel-I2S-DMA/*.c>",
+            "+<ESP32-HUB75-MatrixPanel-I2S-DMA/*.cpp>"
+        ]
+    }
+}

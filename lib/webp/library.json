@@ -1,0 +1,13 @@
+{
+    "name": "libwebp",
+    "build": {
+        "srcFilter": [
+            "+<src/**/*.c>"
+        ],
+        "includeDir": "libwebp/src",
+        "srcDir": "libwebp",
+        "flags": [
+            "-I include"
+        ]
+    }
+}
