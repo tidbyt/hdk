@@ -1,4 +1,4 @@
-# Hardware SDK
+# Hardware Development Kit
 [![Docs](https://img.shields.io/badge/docs-tidbyt.dev-blue?style=flat-square)](https://tidbyt.dev)
 [![Build Status](https://img.shields.io/github/actions/workflow/status/tidbyt/hdk/main.yaml?style=flat-square)](https://github.com/tidbyt/hdk/actions/workflows/main.yaml)
 [![Discourse](https://img.shields.io/discourse/status?server=https%3A%2F%2Fdiscuss.tidbyt.com&style=flat-square)](https://discuss.tidbyt.com/)
