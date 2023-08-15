@@ -157,20 +157,23 @@ static int draw_webp(uint8_t *buf, size_t len) {
   }
 
   int lastTimestamp = 0;
-  int delay = 0;
+  TickType_t drawStartTick = xTaskGetTickCount();
+  // Set delay to > 0 for initial delay; else FreeRTOS assertion fails
+  int delay = 1;
 
   // Draw each frame, and sleep for the delay
   for (int j = 0; j < animation.frame_count; j++) {
     uint8_t *pix;
     int timestamp;
     WebPAnimDecoderGetNext(decoder, &pix, &timestamp);
-    vTaskDelay(pdMS_TO_TICKS(delay));
+    xTaskDelayUntil(&drawStartTick, pdMS_TO_TICKS(delay));
+    drawStartTick = xTaskGetTickCount();
     display_draw(pix, animation.canvas_width, animation.canvas_height, 4, 0, 1,
                  2);
     delay = timestamp - lastTimestamp;
     lastTimestamp = timestamp;
   }
-  vTaskDelay(pdMS_TO_TICKS(delay));
+  xTaskDelayUntil(&drawStartTick, pdMS_TO_TICKS(delay));
 
   // In case of a single frame, sleep for 1s
   if (animation.frame_count == 1) {
