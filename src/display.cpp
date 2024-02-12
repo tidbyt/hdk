@@ -1,23 +1,23 @@
 #include "display.h"
 
-#include <ESP32-HUB75-MatrixPanel-I2S-DMA.h>
+#include "../lib/HUB75/ESP32-HUB75-MatrixPanel-DMA/src/ESP32-HUB75-MatrixPanel-I2S-DMA.h"
 
-#define R1 21
-#define G1 2
-#define BL1 22
-#define R2 23
-#define G2 4
-#define BL2 27
+#define R1 4
+#define G1 5
+#define BL1 6
+#define R2 7
+#define G2 15
+#define BL2 16
 
-#define CH_A 26
-#define CH_B 5
-#define CH_C 25
-#define CH_D 18
+#define CH_A 18
+#define CH_B 8
+#define CH_C 3
+#define CH_D 42
 #define CH_E -1  // assign to pin 14 if using more than two panels
 
-#define LAT 19
-#define OE 32
-#define CLK 33
+#define LAT 40
+#define OE 2
+#define CLK 41
 
 static MatrixPanel_I2S_DMA *_matrix;
 
