@@ -15,8 +15,8 @@ struct remote_state {
   size_t max;
 };
 
-#define HTTP_BUFFER_SIZE_MAX 512 * 1024
-#define HTTP_BUFFER_SIZE_DEFAULT 32 * 1024
+#define HTTP_BUFFER_SIZE_MAX 640 * 1024
+#define HTTP_BUFFER_SIZE_DEFAULT 40 * 1024
 
 #define MAX(a, b) (((a) > (b)) ? (a) : (b))
 #define MIN(a, b) (((a) < (b)) ? (a) : (b))

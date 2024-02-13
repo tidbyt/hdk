@@ -29,12 +29,16 @@ int display_initialize() {
                          32,                      // height
                          1,                       // chain length
                          pins,                    // pin mapping
-                         //HUB75_I2S_CFG::FM6126A,  // driver chip
                          HUB75_I2S_CFG::ICN2038S,  // driver chip
                          true,                    // double-buffering
-                         //HUB75_I2S_CFG::HZ_10M);
-                         HUB75_I2S_CFG::HZ_8M);
+                         HUB75_I2S_CFG::HZ_10M);
+
+  mxconfig.latch_blanking = 4;
+  mxconfig.clkphase = false;
+  
+
   _matrix = new MatrixPanel_I2S_DMA(mxconfig);
+
 
   // Set brightness and clear the screen.
   
