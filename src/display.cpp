@@ -1,23 +1,23 @@
 #include "display.h"
 
-#include "../lib/HUB75/ESP32-HUB75-MatrixPanel-DMA/src/ESP32-HUB75-MatrixPanel-I2S-DMA.h"
+#include <ESP32-HUB75-MatrixPanel-I2S-DMA.h>
 
-#define R1 4
-#define G1 5
-#define BL1 6
-#define R2 7
-#define G2 15
-#define BL2 16
+#define R1 42
+#define G1 41
+#define BL1 40
+#define R2 38
+#define G2 39
+#define BL2 37
+#define CH_A 45
+#define CH_B 36
+#define CH_C 48
+#define CH_D 35
+#define CH_E -1 // assign to any available pin if using panels with 1/32 scan
+#define CLK 2
+#define LAT 47
+#define OE 14
 
-#define CH_A 18
-#define CH_B 8
-#define CH_C 3
-#define CH_D 42
-#define CH_E -1  // assign to pin 14 if using more than two panels
-
-#define LAT 40
-#define OE 2
-#define CLK 41
+static const char* TAG = "display";
 
 static MatrixPanel_I2S_DMA *_matrix;
 
@@ -29,18 +29,23 @@ int display_initialize() {
                          32,                      // height
                          1,                       // chain length
                          pins,                    // pin mapping
-                         HUB75_I2S_CFG::FM6126A,  // driver chip
+                         //HUB75_I2S_CFG::FM6126A,  // driver chip
+                         HUB75_I2S_CFG::ICN2038S,  // driver chip
                          true,                    // double-buffering
-                         HUB75_I2S_CFG::HZ_10M);
+                         //HUB75_I2S_CFG::HZ_10M);
+                         HUB75_I2S_CFG::HZ_8M);
   _matrix = new MatrixPanel_I2S_DMA(mxconfig);
 
   // Set brightness and clear the screen.
-  _matrix->setBrightness8(DISPLAY_DEFAULT_BRIGHTNESS);
+  
   if (!_matrix->begin()) {
+    ESP_LOGE(TAG, "matrix begin failed");
     return 1;
   }
+  _matrix->setBrightness8(DISPLAY_DEFAULT_BRIGHTNESS);
   _matrix->fillScreenRGB888(0, 0, 0);
 
+  ESP_LOGI(TAG, "matrix begin completed");
   return 0;
 }
 
