@@ -128,7 +128,7 @@ static void gfx_loop(void *arg) {
 
     // Draw it
     if (draw_webp(webp, len)) {
-      ESP_LOGE(TAG, "Could not draw webp");
+      //ESP_LOGE(TAG, "Could not draw webp");
     }
   }
 }
@@ -146,7 +146,7 @@ static int draw_webp(uint8_t *buf, size_t len) {
 
   WebPAnimDecoder *decoder = WebPAnimDecoderNew(&webpData, &decoderOptions);
   if (decoder == NULL) {
-    ESP_LOGE(TAG, "Could not create WebP decoder");
+    //ESP_LOGE(TAG, "Could not create WebP decoder");
     return 1;
   }
 

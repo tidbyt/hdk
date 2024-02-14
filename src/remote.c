@@ -8,18 +8,20 @@
 
 static const char* TAG = "remote";
 
-struct remote_state {
+static struct remote_state {
   void* buf;
   size_t len;
   size_t size;
   size_t max;
 };
 
-#define HTTP_BUFFER_SIZE_MAX 640 * 1024
-#define HTTP_BUFFER_SIZE_DEFAULT 40 * 1024
+#define HTTP_BUFFER_SIZE_MAX 128 * 1024
+#define HTTP_BUFFER_SIZE_DEFAULT 32 * 1024
 
 #define MAX(a, b) (((a) > (b)) ? (a) : (b))
 #define MIN(a, b) (((a) < (b)) ? (a) : (b))
+
+struct remote_state* _state = NULL;
 
 static esp_err_t _httpCallback(esp_http_client_event_t* event) {
   esp_err_t err = ESP_OK;
@@ -43,7 +45,7 @@ static esp_err_t _httpCallback(esp_http_client_event_t* event) {
       break;
 
     case HTTP_EVENT_ON_DATA:
-      ESP_LOGD(TAG, "HTTP_EVENT_ON_DATA, len=%d", event->data_len);
+      ESP_LOGI(TAG, "HTTP_EVENT_ON_DATA, len=%d", event->data_len);
 
       if (event->user_data == NULL) {
         ESP_LOGW(TAG, "Discarding HTTP response due to missing state");
@@ -60,12 +62,13 @@ static esp_err_t _httpCallback(esp_http_client_event_t* event) {
         if (state->size > state->max) {
           ESP_LOGE(TAG, "Response size exceeds allowed max (%d bytes)",
                    state->max);
-          free(state->buf);
+          //free(state->buf);
           err = ESP_ERR_NO_MEM;
           break;
         }
 
         // And reallocate
+        /*
         void* new = realloc(state->buf, state->size);
         if (new == NULL) {
           ESP_LOGE(TAG, "Resizing response buffer failed");
@@ -74,6 +77,7 @@ static esp_err_t _httpCallback(esp_http_client_event_t* event) {
           break;
         }
         state->buf = new;
+        */
       }
 
       // Copy over the new data
@@ -103,23 +107,39 @@ static esp_err_t _httpCallback(esp_http_client_event_t* event) {
 
 int remote_get(const char* url, uint8_t** buf, size_t* len) {
   // State for processing the response
-  struct remote_state state = {
-      .buf = malloc(HTTP_BUFFER_SIZE_DEFAULT),
-      .len = 0,
-      .size = HTTP_BUFFER_SIZE_DEFAULT,
-      .max = HTTP_BUFFER_SIZE_MAX,
-  };
+  ESP_LOGI(TAG, "remote_get start");
+  ESP_LOGI(TAG, "Available heap before allocation: %d", esp_get_free_heap_size());
 
-  if (state.buf == NULL) {
-    ESP_LOGE(TAG, "couldn't allocate HTTP receive buffer");
-    return 1;
+  if (_state == NULL) {
+    ESP_LOGI(TAG, "_state is null- malloc");
+    _state = (struct remote_state*)malloc(sizeof(struct remote_state));
+    if (_state != NULL) {
+        ESP_LOGI(TAG, "_state is now not null- initialising");
+        _state->buf = malloc(HTTP_BUFFER_SIZE_MAX);
+        if (_state->buf != NULL) {
+            // Memory allocation for the buffer was successful, now initialize the other fields.
+            _state->len = 0;
+            _state->size = HTTP_BUFFER_SIZE_MAX;
+            _state->max = HTTP_BUFFER_SIZE_MAX;
+        } else {
+            // Memory allocation for the buffer failed, handle the failure.
+            // It's also a good practice to free the previously allocated _state before handling the error.
+            free(_state);
+            _state = NULL; // Reset _state to NULL to indicate the allocation + initialization failed.
+            // Handle error (e.g., log an error message or set an error code).
+            ESP_LOGE(TAG, "couldn't allocate HTTP receive buffer _state.buf");
+        }
+    } else {
+        ESP_LOGE(TAG, "couldn't allocate HTTP receive buffer _state");
+        return 1;
+    }
   }
 
   // Set up http client
   esp_http_client_config_t config = {
       .url = url,
       .event_handler = _httpCallback,
-      .user_data = &state,
+      .user_data = _state,
       .timeout_ms = 10e3,
       .crt_bundle_attach = esp_crt_bundle_attach,
   };
@@ -130,16 +150,18 @@ int remote_get(const char* url, uint8_t** buf, size_t* len) {
   esp_err_t err = esp_http_client_perform(http);
   if (err != ESP_OK) {
     ESP_LOGE(TAG, "couldn't reach %s: %s", url, esp_err_to_name(err));
+    /*
     if (state.buf != NULL) {
       free(state.buf);
     }
+    */
     esp_http_client_cleanup(http);
     return 1;
   }
 
   // Write back the results.
-  *buf = state.buf;
-  *len = state.len;
+  *buf = _state->buf;
+  *len = _state->len;
 
   esp_http_client_cleanup(http);
 
