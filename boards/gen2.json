@@ -8,7 +8,7 @@
         "partitions": "boards/default_8MB.csv",
         "variant": "esp32",
         "esp-idf": {
-            "sdkconfig_path": "sdkconfig"
+            "sdkconfig_path": "sdkconfig.gen2"
         }
     },
     "connectivity": [

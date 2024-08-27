@@ -1,4 +1,5 @@
 #include <assets.h>
+#include <audio_player.h>
 #include <esp_log.h>
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>

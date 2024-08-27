@@ -42,6 +42,10 @@ static esp_err_t _httpCallback(esp_http_client_event_t* event) {
                event->header_value);
       break;
 
+    case HTTP_EVENT_REDIRECT:
+      ESP_LOGD(TAG, "HTTP_EVENT_REDIRECT");
+      break;
+
     case HTTP_EVENT_ON_DATA:
       ESP_LOGD(TAG, "HTTP_EVENT_ON_DATA, len=%d", event->data_len);
 
