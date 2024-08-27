@@ -87,9 +87,9 @@ int wifi_initialize(const char* ssid, const char* password) {
   }
 
   wifi_config_t wifi_config = {0};
-  strncpy((char*)wifi_config.sta.ssid, ssid, sizeof(wifi_config.sta.ssid));
+  strncpy((char*)wifi_config.sta.ssid, ssid, sizeof(wifi_config.sta.ssid) - 1);
   strncpy((char*)wifi_config.sta.password, password,
-          sizeof(wifi_config.sta.password));
+          sizeof(wifi_config.sta.password) - 1);
   err = esp_wifi_set_mode(WIFI_MODE_STA);
   if (err != ESP_OK) {
     ESP_LOGE(TAG, "Set mode failed: %s", esp_err_to_name(err));
