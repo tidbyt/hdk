@@ -51,7 +51,7 @@ void app_main(void) {
              mac[2], mac[3], mac[4], mac[5]);
   }
 
-  // Play a sample. This will only have an affect on Gen 2 devices.
+  // Play a sample. This will only have an effect on Gen 2 devices.
   audio_play(ASSET_LAZY_DADDY_MP3, ASSET_LAZY_DADDY_MP3_LEN);
 
   for (;;) {
