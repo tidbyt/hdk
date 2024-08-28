@@ -122,6 +122,9 @@ esp_err_t audio_play(const unsigned char *data, size_t length) {
 
 #else
 
+#include <esp_err.h>
+#include <stddef.h>
+
 esp_err_t audio_play(const unsigned char *data, size_t length) {
   return ESP_OK;
 }
