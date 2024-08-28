@@ -33,6 +33,9 @@ TIDBYT_REMOTE_URL='http://192.168.10.10:8080/api/v1/preview.webp' \
 pio run --environment tidbyt --target upload
 ```
 
+If you're flashing to a Tidbyt Gen2, just change to the above to use
+the `--environment tidbyt-gen2` flag.
+
 ## Monitoring Logs
 To check the output of your running firmware, run the following:
 ```
