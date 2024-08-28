@@ -1,5 +1,7 @@
 #include "touch.h"
 
+#ifdef TIDBYT_GEN2
+
 #include <driver/gpio.h>
 #include <driver/touch_pad.h>
 #include <esp_err.h>
@@ -91,3 +93,9 @@ esp_err_t touch_initialize(touch_callback_t callback) {
 
   return ESP_OK;
 }
+
+#else
+
+esp_err_t touch_initialize(touch_callback_t callback) { return ESP_OK; }
+
+#endif
