@@ -11,9 +11,15 @@
 #include "gfx.h"
 #include "remote.h"
 #include "sdkconfig.h"
+#include "touch.h"
 #include "wifi.h"
 
 static const char* TAG = "main";
+
+void _on_touch() {
+  ESP_LOGI(TAG, "Touch detected");
+  audio_play(ASSET_LAZY_DADDY_MP3, ASSET_LAZY_DADDY_MP3_LEN);
+}
 
 void app_main(void) {
   ESP_LOGI(TAG, "Hello world!");
@@ -42,6 +48,12 @@ void app_main(void) {
   // Setup audio.
   if (audio_initialize() != ESP_OK) {
     ESP_LOGE(TAG, "failed to initialize audio");
+    return;
+  }
+
+  // Setup touch.
+  if (touch_initialize(_on_touch) != ESP_OK) {
+    ESP_LOGE(TAG, "failed to initialize touch");
     return;
   }
 
