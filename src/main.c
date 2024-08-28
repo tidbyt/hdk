@@ -5,6 +5,7 @@
 #include <freertos/timers.h>
 #include <webp/demux.h>
 
+#include "audio.h"
 #include "display.h"
 #include "flash.h"
 #include "gfx.h"
@@ -38,11 +39,20 @@ void app_main(void) {
   }
   esp_register_shutdown_handler(&wifi_shutdown);
 
+  // Setup audio.
+  if (audio_initialize() != ESP_OK) {
+    ESP_LOGE(TAG, "failed to initialize audio");
+    return;
+  }
+
   uint8_t mac[6];
   if (!wifi_get_mac(mac)) {
     ESP_LOGI(TAG, "WiFi MAC: %02x:%02x:%02x:%02x:%02x:%02x", mac[0], mac[1],
              mac[2], mac[3], mac[4], mac[5]);
   }
+
+  // Play a sample. This will only have an effect on Gen 2 devices.
+  audio_play(ASSET_LAZY_DADDY_MP3, ASSET_LAZY_DADDY_MP3_LEN);
 
   for (;;) {
     uint8_t* webp;
