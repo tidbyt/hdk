@@ -39,11 +39,11 @@ static esp_err_t _httpCallback(esp_http_client_event_t* event) {
       break;
 
     case HTTP_EVENT_ON_HEADER:
-      ESP_LOGD(TAG, "HTTP_EVENT_ON_HEADER, key=%s, value=%s", event->header_key,
+      ESP_LOGI(TAG, "HTTP_EVENT_ON_HEADER, key=%s, value=%s", event->header_key,
                event->header_value);
       
       // Check for the Content-Length header
-      if (strcmp(event->header_key, "Content-Length") == 0) {
+      if (strcasecmp(event->header_key, "Content-Length") == 0) {
         size_t content_length = (size_t)atoi(event->header_value);
         if (content_length > state->max) {
           ESP_LOGE(TAG,
@@ -57,11 +57,11 @@ static esp_err_t _httpCallback(esp_http_client_event_t* event) {
       }
 
       // Check for the specific header key
-      if (strcmp(event->header_key, "Tronbyt-Brightness") == 0) {
+      if (strcasecmp(event->header_key, "Tronbyt-Brightness") == 0) {
         state->brightness = (uint8_t)atoi(event->header_value); // API spec: 0-100
         ESP_LOGD(TAG, "Tronbyt-Brightness value: %d%%", state->brightness);
       }
-      else if (strcmp(event->header_key, "Tronbyt-Dwell-Secs") == 0) {
+      else if (strcasecmp(event->header_key, "Tronbyt-Dwell-Secs") == 0) {
         state->dwell_secs = (int)atoi(event->header_value);
         // ESP_LOGI(TAG, "Tronbyt-Dwell-Secs value: %i", dwell_secs_value);
       }
